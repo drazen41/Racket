@@ -10,7 +10,7 @@
 ;; define some streams
 
 ;(define ones-really-bad (cons 1 ones-really-bad))
-(define ones-bad (lambda () (cons 1 (ones-bad)))) ;infinite loop, (ones-bad) executes thunk and put value inside call
+(define ones-bad (lambda () (cons 1 (ones-bad))))
 
 (define ones (lambda () (cons 1 ones)))
 

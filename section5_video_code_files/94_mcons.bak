@@ -18,4 +18,3 @@
 (define bye (mcdr (mcdr mpr)))
 
 ; Note: run-time error to use mcar on a cons or car on an mcons
-(set-mcar! mpr "test")

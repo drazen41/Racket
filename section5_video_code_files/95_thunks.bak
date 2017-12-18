@@ -26,5 +26,3 @@
   (my-if-strange-but-works (= x 0)
 			   (lambda () 1)
 			   (lambda () (* x (factorial-okay (- x 1))))))
-
-(define b (lambda() (+ 3 2))) ;zero argument function = thunk

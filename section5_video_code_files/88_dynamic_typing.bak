@@ -28,10 +28,3 @@
           (if (list? (car xs))
               (+ (sum2 (car xs)) (sum2 (cdr xs)))
               (sum2 (cdr xs))))))
-
-(define test (sum1(list 1 2 3 4 5 6(list 1 2 3(list 1 2)))))
-
-
-(define test1 (sum2(list 1 2 3 (list 1)(list #t)(list 5 6 7)"foo")))
-
-(define test2 (sum1(list (list 1 2)(list 2 3)(list 3 4))))

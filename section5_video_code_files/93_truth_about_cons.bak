@@ -15,8 +15,3 @@
 (define of-course (and (list? lst) (pair? lst)))
 ; (define do-not-do-this (length pr))
 
-(define a (cons 1 (cons 3 4))) ;nije lista, pair
-(define b (cons #t (cons #f (cons #f #f)))) ;nije lista
-(define c (cons "a" (cons "b" (cons 3 (cons 10 null))))) ; lista
-(define yes (and (a pair)(c list)))
-(define no (and (a pair)(b list)))
