@@ -40,5 +40,3 @@
     (f stream 1)))
 
 (define four (number-until powers-of-two (lambda (x) (= x 16))))
-
-(define fourth (car((cdr((cdr(ones)))))))

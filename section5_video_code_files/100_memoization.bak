@@ -34,6 +34,3 @@
                          (set! memo (cons (cons x new-ans) memo))
                          new-ans)))))])
     f))
-
-
-(define fib (fibonacci3 500))

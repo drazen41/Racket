@@ -46,9 +46,3 @@
        (my-let* ([var-rest val-rest] ...)
                 body))]))
 
-
-;(define 5hi (for 7 to 11 do (print "hi")))
-(define (f x)(begin (print "A") x))
-(define (g x)(begin (print "B") x))
-(define (h x)(begin (print "C") x))
-; (for (f 7) to (g 11) do (h 9))
