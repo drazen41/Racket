@@ -57,5 +57,6 @@
                #f))])
     (f 0)))
 (define (cached-assoc xs n)
-  (lambda ()(13)))
+  (letrec([memo null]
+          [f (lambda
   
