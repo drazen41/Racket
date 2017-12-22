@@ -12,7 +12,7 @@
 ;(define ones-really-bad (cons 1 ones-really-bad))
 (define ones-bad (lambda () (cons 1 (ones-bad))))
 
-(define ones (lambda () (cons 1 ones)))
+(define ones (lambda () (cons 1 ones))) ;-> thunk (zero argument function)
 
 (define nats
   (letrec ([f (lambda (x) (cons x (lambda () (f (+ x 1)))))])

@@ -36,13 +36,26 @@
                                (cons "dog.jpg" (lambda()( f (+ x 1)))) ))])
     (lambda() (f 1))))
 (define (stream-add-zero stream)
-  (let([pr (stream)])
-    (cons (car pr) (stream-add-zero (cdr stream)))))
-  
+  (letrec([f (lambda(x)(cons
+                 (cons 0 (car (x)))
+               (lambda()(f (cdr(x))))))])
+     (lambda()(f stream))))
+
 (define (cycle-lists xs ys)
-  (lambda ()(6)))
+  (letrec([f (lambda(x)(cons
+                        (cons (list-nth-mod xs x)(list-nth-mod ys x))
+                        (lambda()(f(+ x 1))))
+                             )])
+    (lambda()(f 0))))
 (define (vector-assoc v vec)
-  #f)
+  (letrec([l (vector-length vec) ]
+          [f (lambda(n)
+               (if (< n l)
+               (if(and (pair? (vector-ref vec n))(equal? v (car(vector-ref vec n))))
+                (vector-ref vec n)
+                (f(+ n 1)))
+               #f))])
+    (f 0)))
 (define (cached-assoc xs n)
   (lambda ()(13)))
   
