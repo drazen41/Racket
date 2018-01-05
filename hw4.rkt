@@ -98,4 +98,18 @@
 			                        #t
 			                        (loop))))])
           (loop))))))
+(define (cached-assoc1 xs n)
+  (define cache (make-vector n #f))
+  (define pos 0)
+  (define (update-cache v)
+      (vector-set! cache pos v)
+      (set! pos (modulo (+ 1 pos) (vector-length cache))))
+  (lambda (v)
+    (let ([cached-pr (vector-assoc v cache)])
+      (if (pair? cached-pr)
+        cached-pr
+        (let ([pr (assoc v xs)])
+          (if (pair? pr)
+            (begin (update-cache pr) pr)
+            #f))))))
   
