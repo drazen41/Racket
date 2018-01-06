@@ -60,6 +60,7 @@
          e]
         [(aunit? e)
          e]
+        [(apair? e) e]
         [(ifgreater? e)
          (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
                [v2 (eval-under-env (ifgreater-e2 e) env)])
@@ -69,7 +70,9 @@
                    (eval-under-env (ifgreater-e4 e) env))
                (error "MUPL ifgreater works only with integers")))]
         [(mlet? e)
-         (let ([foo (cons(cons (mlet-var e) (mlet-e e))env)])
+         (let (;[v1 (mlet-var e)]
+               ;[v2 (eval-under-env
+               [foo (cons(cons (mlet-var e) (mlet-e e))env)])
            (eval-under-env (mlet-body e) foo))]
            ;foo)]
         [(fun? e)
@@ -113,10 +116,9 @@
                (eval-under-env(apair-e2 f)env)
              (error (format "MUPL snd-e is not apair: ~v" f))))]   
         [(isaunit? e)       
-         (let ([r (isaunit-e e) ])
-          (if (aunit? r)
-              (int 1)
-              (int 0)))]
+         (if (aunit? (eval-under-env(isaunit-e e)env)) 
+          (int 1)
+          (int 0))]
          
                
          

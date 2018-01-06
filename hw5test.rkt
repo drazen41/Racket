@@ -27,8 +27,9 @@
    
    ;; mlet test
    (check-equal? (eval-exp (mlet "x" (int 1) (add (int 5) (var "x")))) (int 6) "mlet test")
-   (check-equal? (eval-under-env (var "x")env)(int 1) "eval-under-env test")
-   (check-equal? (eval-under-env (add(int 5)(var "x"))env)(int 6) "eval-under-env test")
+   ;(check-equal? (eval-exp(mlet "f" (fun "length" "lst" (ifgreater (isaunit (var "lst")) (int 0) (int 0) (add (int 1) (call (var "length") (snd (var "lst")))))) (call (var "f") (aunit))))(int 0) "mlet test2")
+   ;(check-equal? (eval-under-env (var "x")env)(int 1) "eval-under-env test")
+   ;(check-equal? (eval-under-env (add(int 5)(var "x"))env)(int 6) "eval-under-env test")
    ;; call test
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
    ;(check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test")
@@ -40,6 +41,7 @@
    ;; isaunit test
    (check-equal? (eval-exp (isaunit (closure '() (fun #f "x" (aunit))))) (int 0) "isaunit test")
     (check-equal? (eval-exp (isaunit (apair (int 2) (int 1)))) (int 0) "isaunit test 1")
+     (check-equal? (eval-exp (isaunit (fst (apair (aunit) (aunit))))) (int 1) "isaunit test 2")
    ;; ifaunit test
    (check-equal? (eval-exp (ifaunit (int 1) (int 2) (int 3))) (int 3) "ifaunit test")
    (check-equal? (eval-exp (ifaunit (fst (apair (aunit) (int 0))) (int 4) (int 10))) (int 4) "ifaunit test")
