@@ -9,7 +9,8 @@
 (require "hw5.rkt")
 
 (require rackunit)
-(define env (cons(cons "x" (int 1))null))
+(define env (cons(cons "x" (int 1))null)); env je racket lista racket parova
+(define eval (eval-under-env (var "x") env));
 (define lstlst (list(cons "x" (int 10))))
 (define clos-call (call mupl-map (fun #f "x" (add (var "x") (int 7)))))
 (define tests
@@ -24,13 +25,17 @@
 
    ;; tests if ifgreater returns (int 2)
    (check-equal? (eval-exp (ifgreater (int 3) (int 4) (int 3) (int 2))) (int 2) "ifgreater test")
-   
-   ;; mlet test
+
+   ;; test fun -> fun nameopt(string) formal(string) body (exp) - u body nameopt vezati za funkciju (rekurzija), formal za argument u body ; fun #f formal body -> nerekurzivna funkcija
+    (check-equal? (eval-under-env (fun #f "x" (add (var "x") (int 7))) (int 1)) (int 8) "fun test")
+    
+   ;; mlet test -> mlet(var e body) - e (exp) i var (string) su env, body evaluira sa env
    (check-equal? (eval-exp (mlet "x" (int 1) (add (int 5) (var "x")))) (int 6) "mlet test")
-   ;(check-equal? (eval-exp(mlet "f" (fun "length" "lst" (ifgreater (isaunit (var "lst")) (int 0) (int 0) (add (int 1) (call (var "length") (snd (var "lst")))))) (call (var "f") (aunit))))(int 0) "mlet test2")
+   (check-equal? (eval-exp(mlet "f" (fun "length" "lst" (ifgreater (isaunit (var "lst")) (int 0) (int 0) (add (int 1) (call (var "length") (snd (var "lst")))))) (call (var "f") (aunit))))(int 0) "mlet test2")
    ;(check-equal? (eval-under-env (var "x")env)(int 1) "eval-under-env test")
    ;(check-equal? (eval-under-env (add(int 5)(var "x"))env)(int 6) "eval-under-env test")
-   ;; call test
+
+   ;; call test - e1 (closure-obavezno), e2 (environment za closure)
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
    ;(check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test")
    

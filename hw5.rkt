@@ -71,39 +71,31 @@
                (error "MUPL ifgreater works only with integers")))]
         [(mlet? e)
          (let (;[v1 (mlet-var e)]
-               ;[v2 (eval-under-env
+               ;[v2 (mlet-e e)])
                [foo (cons(cons (mlet-var e) (mlet-e e))env)])
            (eval-under-env (mlet-body e) foo))]
            ;foo)]
         [(fun? e)
-         ;(fun-nameopt e)
-         ;(fun-formal e)
-         (fun-body e)
-        
-         ]
-        [(closure? e)
+         (let ([fn (fun-nameopt e)]
+               [ff (fun-formal e)]
+               [fb (fun-body e)])
+           (eval-under-env fb (list(cons ff env))))]
+          
+         
+        [(closure? e) 
          e
          ]
         [(call? e)
-         (let ([v1 (call-funexp e)]
-               [v2 (call-actual e)])
+         (letrec ([v1 (eval-under-env(call-funexp e)env)]
+               [v2 (eval-under-env (call-actual e) env) ])
            (if (closure? v1)
               (letrec ([cf (closure-fun v1)]
-                       [ce (closure-env v1)]
-                       [fn (fun-nameopt cf)]
-                       [ff (fun-formal cf)]
-                       [fb (fun-body cf)])
-                (eval-under-env
-                fb
-                 (if (eq? fn #f)
-                     (cons(cons ff v2)env)
-                    (cons(cons(cons ff v2)(cons fn ce))env))))
-                     ;(cons(cons(cons ff v2) ce)env)))
-                     ;(cons fn ce )))
-                    ; fn))
-                ;(eval-under-env fb (cons(cons ff v2)env)))
-               ;(error (format "MUPL call to wrong closure: ~v" v1))
-              e
+                       [ce (closure-env v1)])
+                      
+                (eval-under-env cf v2  ))
+                ;(cons v2 ce))
+              ;(eval-under-env e env)
+              v1
                ))]
         [(fst? e)
          (let([f(fst-e e)])
@@ -133,6 +125,7 @@
 
 (define (ifaunit e1 e2 e3)
   (if (aunit? (eval-under-env e1 null)) e2 e3))
+  ;(if (
       
               
 (define (mlet* lstlst e2)
