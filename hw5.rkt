@@ -88,14 +88,14 @@
         [(call? e)
          (letrec ([v1 (eval-under-env(call-funexp e)env)]
                [v2 (eval-under-env (call-actual e) env) ])
-           (if (closure? v1)
+           (if (closure? v1) 
               (letrec ([cf (closure-fun v1)]
                        [ce (closure-env v1)])
                       
                 (eval-under-env cf v2  ))
                 ;(cons v2 ce))
               ;(eval-under-env e env)
-              v1
+              (eval-under-env v1 (call-actual e))
                ))]
         [(fst? e)
          (let([f(fst-e e)])

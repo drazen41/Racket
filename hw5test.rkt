@@ -37,7 +37,7 @@
 
    ;; call test - e1 (closure-obavezno), e2 (environment za closure)
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
-   ;(check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test")
+   (check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test")
    
    ;;snd/fst test
    (check-equal? (eval-exp (snd (apair (int 1) (int 2)))) (int 2) "snd test")
