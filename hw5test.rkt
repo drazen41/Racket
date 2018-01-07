@@ -5,8 +5,8 @@
 
 ;; Be sure to put your homework file in the same folder as this test file.
 ;; Uncomment the line below and, if necessary, change the filename
-;(require "hw5_sol1.rkt")
-(require "hw5.rkt")
+(require "hw5_sol2.rkt")
+;(require "hw5.rkt")
 
 (require rackunit)
 (define env (cons(cons "x" (int 1))null)); env je racket lista racket parova
@@ -27,7 +27,7 @@
    (check-equal? (eval-exp (ifgreater (int 3) (int 4) (int 3) (int 2))) (int 2) "ifgreater test")
 
    ;; test fun -> fun nameopt(string) formal(string) body (exp) - u body nameopt vezati za funkciju (rekurzija), formal za argument u body ; fun #f formal body -> nerekurzivna funkcija
-    (check-equal? (eval-under-env (fun #f "x" (add (var "x") (int 7))) (int 1)) (int 8) "fun test")
+    ;(check-equal? (eval-under-env (fun #f "x" (add (var "x") (int 7))) (int 1)) (int 8) "fun test")
     
    ;; mlet test -> mlet(var e body) - e (exp) i var (string) su env, body evaluira sa env
    (check-equal? (eval-exp (mlet "x" (int 1) (add (int 5) (var "x")))) (int 6) "mlet test")
@@ -37,7 +37,7 @@
 
    ;; call test - e1 (closure-obavezno), e2 (environment za closure)
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
-   (check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test")
+   (check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test2")
    
    ;;snd/fst test
    (check-equal? (eval-exp (snd (apair (int 1) (int 2)))) (int 2) "snd test")
@@ -52,19 +52,19 @@
    (check-equal? (eval-exp (ifaunit (fst (apair (aunit) (int 0))) (int 4) (int 10))) (int 4) "ifaunit test")
    ;; mlet* test
    (check-equal? (eval-exp (mlet* (list (cons "x" (int 10))) (var "x"))) (int 10) "mlet* test")
-    (check-equal? (eval-exp (mlet* (list (cons "x" (var "y"))(cons "y" (int 20))) (var "x"))) (int 20) "mlet* test 2")
+    ;(check-equal? (eval-exp (mlet* (list (cons "x" (var "y"))(cons "y" (int 20))) (var "x"))) (int 20) "mlet* test 2")
    ;; ifeq test
    (check-equal? (eval-exp (ifeq (int 1) (int 2) (int 3) (int 4))) (int 4) "ifeq test")
    (check-equal? (eval-exp (ifeq (add(int 1)(int 1)) (int 2) (int 3) (int 4))) (int 3) "ifeq test 2")
    ;; mupl-map test
-  ; (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
-   ;            (apair (int 8) (aunit)) "mupl-map test")
+   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
+              (apair (int 8) (aunit)) "mupl-map test")
    
    ;; problems 1, 2, and 4 combined test
-   ;(check-equal? (mupllist->racketlist
-   ;(eval-exp (call (call mupl-mapAddN (int 7))
-    ;               (racketlist->mupllist 
-     ;               (list (int 3) (int 4) (int 9)))))) (list (int 10) (int 11) (int 16)) "combined test")
+   (check-equal? (mupllist->racketlist
+   (eval-exp (call (call mupl-mapAddN (int 7))
+                  (racketlist->mupllist 
+                  (list (int 3) (int 4) (int 9)))))) (list (int 10) (int 11) (int 16)) "combined test")
    
    ))
 
