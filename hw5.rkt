@@ -72,30 +72,41 @@
         [(mlet? e)
          (let (;[v1 (mlet-var e)]
                ;[v2 (mlet-e e)])
-               [foo (cons(cons (mlet-var e) (mlet-e e))env)])
+               [foo (cons(cons (mlet-var e) (eval-under-env(mlet-e e)env))env)])
            (eval-under-env (mlet-body e) foo))]
            ;foo)]
         [(fun? e)
          (let ([fn (fun-nameopt e)]
                [ff (fun-formal e)]
                [fb (fun-body e)])
-           (eval-under-env fb (list(cons ff env))))]
-          
+          (closure env (fun fn ff fb)))]
          
         [(closure? e) 
          e
          ]
-        [(call? e)
+         [(call? e)
+          
          (letrec ([v1 (eval-under-env(call-funexp e)env)]
                [v2 (eval-under-env (call-actual e) env) ])
-           (if (closure? v1) 
+           (if (closure? v1)
               (letrec ([cf (closure-fun v1)]
-                       [ce (closure-env v1)])
-                      
-                (eval-under-env cf v2  ))
-                ;(cons v2 ce))
-              ;(eval-under-env e env)
-              (eval-under-env v1 (call-actual e))
+                       [ce (closure-env v1)]
+                       [fn (fun-nameopt cf)]
+                       [ff (fun-formal cf)]
+                       [fb (fun-body cf)])
+                (eval-under-env fb                                
+                 (if (eq? fn #f)
+                    (list(cons ff v2))
+                    ;(list(cons ff v2)(cons fn ce))))
+                   (list(cons ff v2)(cons fn v1)))))
+                    ;cf))
+                     ;(cons(cons(cons ff v2) ce)env)))
+                     ;(cons fn ce )))
+                    ; fn))
+                ;(eval-under-env fb (cons(cons ff v2)env)))
+              (error (format "MUPL call to wrong closure: ~v" v1))
+            
+              ;v1
                ))]
         [(fst? e)
          (let([f(fst-e e)])
@@ -124,27 +135,22 @@
 ;; Problem 3
 
 (define (ifaunit e1 e2 e3)
-  (if (aunit? (eval-under-env e1 null)) e2 e3))
-  ;(if (
-      
-              
+  (ifgreater (isaunit e1) (int 0) e2 e3))
+  
+                  
 (define (mlet* lstlst e2)
-  (letrec([env(list (car lstlst))]
-         [v1 (eval-under-env e2 env)])
-  (if (empty?(cdr lstlst))
-        v1
-        (mlet* (cdr lstlst) v1))))
-  ;(car lstlst))
-
+  (if(not (empty? lstlst))
+      (if (null? (cdr lstlst))
+          (mlet (car (car lstlst)) (cdr (car lstlst)) e2)
+          (mlet (car (car lstlst)) (cdr (car lstlst)) (mlet* (cdr lstlst) e2)))
+      (aunit)))
 (define (ifeq e1 e2 e3 e4)
- (let ([v1 (eval-under-env e1 null)]
-       [v2 (eval-under-env e2 null)])
-           (if (and (int? v1)(int? v2))
-               (if (eq? (int-num v1) (int-num v2))
-                   (eval-under-env e3 null)
-                   (eval-under-env e4 null))
-               (error "MUPL ifgreater works only with integers"))))
-  ;e1)
+      (mlet* (list (cons "_x" e1) (cons "_y" e2))
+         (ifgreater (var "_x") (var "_y") e4
+                   (ifgreater (var "_y") (var "_x") e4 e3))))  
+  
+ 
+
 
 ;; Problem 4
 

@@ -5,8 +5,8 @@
 
 ;; Be sure to put your homework file in the same folder as this test file.
 ;; Uncomment the line below and, if necessary, change the filename
-(require "hw5_sol2.rkt")
-;(require "hw5.rkt")
+;(require "hw5_sol2.rkt")
+(require "hw5.rkt")
 
 (require rackunit)
 (define env (cons(cons "x" (int 1))null)); env je racket lista racket parova
@@ -37,8 +37,7 @@
 
    ;; call test - e1 (closure-obavezno), e2 (environment za closure)
    (check-equal? (eval-exp (call (closure '() (fun #f "x" (add (var "x") (int 7)))) (int 1))) (int 8) "call test")
-   (check-equal? (eval-exp (call (closure '() (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1)))) (int 1))) (int 8) "call test2")
-   
+   (check-equal? (eval-exp(call (fun "sum-to" "n" (ifgreater (var "n") (int 1) (add (var "n") (call (var "sum-to") (add (var "n") (int -1)))) (int 1))) (int 5))) (int 15) "Call test 3")
    ;;snd/fst test
    (check-equal? (eval-exp (snd (apair (int 1) (int 2)))) (int 2) "snd test")
    (check-equal? (eval-exp (fst (apair (add (int 1) (int 3)) (aunit)))) (int 4) "fst test")
@@ -49,22 +48,24 @@
      (check-equal? (eval-exp (isaunit (fst (apair (aunit) (aunit))))) (int 1) "isaunit test 2")
    ;; ifaunit test
    (check-equal? (eval-exp (ifaunit (int 1) (int 2) (int 3))) (int 3) "ifaunit test")
-   (check-equal? (eval-exp (ifaunit (fst (apair (aunit) (int 0))) (int 4) (int 10))) (int 4) "ifaunit test")
+   (check-equal? (eval-exp (ifaunit (fst (apair (aunit) (int 0))) (int 4) (int 10))) (int 4) "ifaunit test2")
    ;; mlet* test
    (check-equal? (eval-exp (mlet* (list (cons "x" (int 10))) (var "x"))) (int 10) "mlet* test")
-    ;(check-equal? (eval-exp (mlet* (list (cons "x" (var "y"))(cons "y" (int 20))) (var "x"))) (int 20) "mlet* test 2")
+    (check-equal? (eval-exp (mlet* '() (var "x"))) (aunit) "mlet* test2")
+   ;(check-equal? (eval-exp (mlet* (list (cons "x" (var "y"))(cons "y" (int 20))) (var "x"))) (int 20) "mlet* test 2")
    ;; ifeq test
    (check-equal? (eval-exp (ifeq (int 1) (int 2) (int 3) (int 4))) (int 4) "ifeq test")
+   (check-equal? (eval-exp (ifeq (int 10) (int 10) (int 3) (int 4)))(int 3) "ifeq test3")
    (check-equal? (eval-exp (ifeq (add(int 1)(int 1)) (int 2) (int 3) (int 4))) (int 3) "ifeq test 2")
    ;; mupl-map test
-   (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
-              (apair (int 8) (aunit)) "mupl-map test")
+  ; (check-equal? (eval-exp (call (call mupl-map (fun #f "x" (add (var "x") (int 7)))) (apair (int 1) (aunit)))) 
+  ;            (apair (int 8) (aunit)) "mupl-map test")
    
    ;; problems 1, 2, and 4 combined test
-   (check-equal? (mupllist->racketlist
-   (eval-exp (call (call mupl-mapAddN (int 7))
-                  (racketlist->mupllist 
-                  (list (int 3) (int 4) (int 9)))))) (list (int 10) (int 11) (int 16)) "combined test")
+ ;  (check-equal? (mupllist->racketlist
+  ; (eval-exp (call (call mupl-mapAddN (int 7))
+  ;                (racketlist->mupllist 
+  ;                (list (int 3) (int 4) (int 9)))))) (list (int 10) (int 11) (int 16)) "combined test")
    
    ))
 
