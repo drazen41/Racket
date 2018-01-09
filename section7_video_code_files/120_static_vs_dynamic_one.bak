@@ -34,4 +34,4 @@
         1
         (+ x ((pow-bad-algorithm x) (- y 1)))))) ; oops
 
-(define test ((pow-bad-algorithm 3)4)) ;13 umjesto 3 na 4
+(define bad-calc (pow-bad-algorithm 3)4) ;13 umjesto 3 na 4
