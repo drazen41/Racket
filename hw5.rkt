@@ -76,10 +76,7 @@
            (eval-under-env (mlet-body e) foo))]
            ;foo)]
         [(fun? e)
-         (let ([fn (fun-nameopt e)]
-               [ff (fun-formal e)]
-               [fb (fun-body e)])
-          (closure env (fun fn ff fb)))]
+         (closure env e)]
          
         [(closure? e) 
          e
@@ -96,18 +93,20 @@
                        [fb (fun-body cf)])
                 (eval-under-env fb                                
                  (if (eq? fn #f)
-                    (list(cons ff v2))
-                    ;(list(cons ff v2)(cons fn ce))))
-                   (list(cons ff v2)(cons fn v1)))))
+                   ; (list(cons ff v2))
+                     (cons(cons ff v2)ce)
+                   ;(list(cons ff v2)(cons fn ce))))
+                  ;(cons(cons ff v2)(cons fn ce))))
+               (cons(cons ff v2) (cons (cons fn v1) ce)))))
                     ;cf))
                      ;(cons(cons(cons ff v2) ce)env)))
                      ;(cons fn ce )))
                     ; fn))
                 ;(eval-under-env fb (cons(cons ff v2)env)))
-              (error (format "MUPL call to wrong closure: ~v" v1))
+              (error (format "MUPL call to wrong closure: ~v" v1)))
             
               ;v1
-               ))]
+               )]
         [(fst? e)
          (let([f(fst-e e)])
            (if (apair? f)
@@ -154,15 +153,14 @@
 
 ;; Problem 4
 
-(define (mupl-map e)
-  (fun #f "f" (fun "loop" "xs" (ifgreater 
+(define mupl-map 
+ (fun #f "f" (fun "loop" "xs" (ifgreater 
                     (isaunit (var "xs")) 
                     (int 0)
                     (aunit)
                     (apair
                      (call (var "f") (fst (var "xs")))
                      (call (var "loop") (snd (var "xs"))))))))
-
 (define mupl-mapAddN 
   (mlet "map" mupl-map
         "CHANGE (notice map is now in MUPL scope)"))
