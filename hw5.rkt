@@ -71,11 +71,9 @@
                    (eval-under-env (ifgreater-e4 e) env))
                (error "MUPL ifgreater works only with integers")))]
         [(mlet? e)
-         (let (;[v1 (mlet-var e)]
-               ;[v2 (mlet-e e)])
-               [foo (cons(cons (mlet-var e) (eval-under-env(mlet-e e)env))env)])
+         (let ([foo (cons(cons (mlet-var e) (eval-under-env(mlet-e e)env))env)])
            (eval-under-env (mlet-body e) foo))]
-           ;foo)]
+          
         [(fun? e)
          (closure env e)]
          
@@ -91,16 +89,9 @@
                        [fb (fun-body cf)])
                 (eval-under-env fb                                
                  (if (eq? fn #f)
-                   ; (list(cons ff v2))
-                     (cons(cons ff v2)ce)
-                   ;(list(cons ff v2)(cons fn ce))))
-                  ;(cons(cons ff v2)(cons fn ce))))
-               (cons(cons ff v2) (cons (cons fn v1) ce)))))
-                    ;cf))
-                     ;(cons(cons(cons ff v2) ce)env)))
-                     ;(cons fn ce )))
-                    ; fn))
-                ;(eval-under-env fb (cons(cons ff v2)env)))
+                     (cons(cons ff v2)ce)                  
+                     (cons(cons ff v2) (cons (cons fn v1) ce)))))
+
               (error (format "MUPL call to wrong closure: ~v" v1)))
             
               ;v1
