@@ -152,17 +152,15 @@
 ;; Problem 4
 
 (define mupl-map 
- (fun #f "f" (fun "loop" "xs" (ifgreater 
-                    (isaunit (var "xs")) 
-                    (int 0)
-                    (aunit)
-                    (apair
-                     (call (var "f") (fst (var "xs")))
-                     (call (var "loop") (snd (var "xs"))))))))
+ (fun #f "v1"
+      (fun "func" "xs" (ifgreater (isaunit (var "xs")) (int 0)
+                                  (aunit)
+                                  (apair (call (var "v1") (fst (var "xs")))
+                                         (call (var "func") (snd (var "xs"))))))))
 (define mupl-mapAddN 
   (mlet "map" mupl-map
-        "CHANGE (notice map is now in MUPL scope)"))
-
+       (fun #f "a"
+             (call (var "map") (fun #f "b" (add (var "b") (var "a")))))))
 ;; Challenge Problem
 
 (struct fun-challenge (nameopt formal body freevars) #:transparent) ;; a recursive(?) 1-argument function
